@@ -11,7 +11,7 @@ Most AI assistants give generic, placebo advice: *"flush your DNS"*, *"restart y
 `ai-fix-my-wifi` enforces a **strictly sequential, 3-phase engineering methodology**:
 1. **Zero-Load Isolation**: Measures idle Wi-Fi vs. ISP jitter, inspects Clear Channel Assessment (CCA) airtime utilization, and tests uncached DNS latency with randomized subdomains.
 2. **Saturation & Bufferbloat**: Runs Apple `networkQuality -v` to measure true working latency (RPM) and ECN status under load.
-3. **Router Recovery Logic**: Troubleshoots embedded ONT quirks (like Nokia/Alcatel `thttpd` timeouts on `/` by probing `/login.cgi` and HTTPS).
+3. **Router Recovery Logic**: Troubleshoots embedded ONT quirks (like router web servers timing out on root `/` by probing `/login.cgi` and HTTPS).
 4. **Before vs. After Verification**: Re-runs the identical benchmark suite after router changes to prove latency and airtime improvements with real delta metrics.
 
 ---
@@ -83,16 +83,17 @@ Once I apply the changes, re-run the identical sequential benchmark suite and pr
 
 ---
 
-## 📊 Real-World Benchmark Results
+## 📊 Sample Benchmark Output
 
-Here is an actual benchmark produced using this prompt on a fiber connection with an ONT gateway:
+Here is an example benchmark table produced by this prompt:
 
-| Metric | Before Optimization | After Optimization | Real Impact |
+| Diagnostic Metric | Before Optimization | After Optimization | Real Impact |
 | :--- | :--- | :--- | :--- |
-| **5 GHz Channel** | Channel 149 (80 MHz) | Channel 36 (80 MHz) | **Eliminated -47 dBm co-channel contention** |
-| **CCA Airtime Congestion** | 28% busy | < 5% busy | **Zero transmission backoff & frame drops** |
-| **Uncached DNS Latency** | 30.8 ms (Google IPv6) | 15.2 ms (Cloudflare) | **⚡ 50.6% faster first-byte domain resolution** |
-| **Loaded Responsiveness** | 518 RPM (115.8 ms) | 1008 RPM (59.5 ms) | **🚀 2× Responsiveness boost under load** |
+| **5 GHz Channel & Band** | Congested Channel (Co-channel overlap) | Clean Non-DFS Channel | **Zero neighboring AP collision** |
+| **Airtime Congestion (CCA)** | ~25–30% busy | < 5% busy | **Eliminated frame drops & TX rate degradation** |
+| **Uncached DNS Resolution** | ~30–40 ms (Unoptimized Resolver) | ~15 ms (Optimized Anycast) | **⚡ ~50% faster first-byte asset loading** |
+| **Working Latency Under Load** | High (~110–120 ms / ~500 RPM) | Low (~50–60 ms / ~1000 RPM) | **🚀 2× Responsiveness boost under load** |
+| **Packet Loss & Stability** | Intermittent jitter spikes | 0.0% loss / Flat RTT | **Stable VoIP, conferencing, and gaming** |
 
 ---
 
